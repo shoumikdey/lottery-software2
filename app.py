@@ -42,7 +42,9 @@ def file_up():
         print(filename)
         df = pd.read_excel(file)
         df.to_csv('lottery.csv', encoding='utf-8', index=False)
-        
+        hindi, bengali = create_separate_arrays(df)
+        hindi_lottery, bengali_lottery = lottery_maker(list(bengali), list(hindi), int(request.form['hindi']), int(request.form['bengali']))
+        print(len(hindi_lottery), len(bengali_lottery))
         print(request.form['hindi'], request.form['bengali'])
         return send_file('lottery.csv',  as_attachment=True)
 
