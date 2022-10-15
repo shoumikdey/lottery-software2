@@ -3,7 +3,8 @@ from flask import Flask, render_template, request, send_file
 from werkzeug.utils import secure_filename
 import pandas as pd
 import numpy as np
-from random import sample
+from random import sample, seed
+import datetime
 
 UPLOAD_FOLDER = ''
 
@@ -37,16 +38,19 @@ def index():
 @app.route('/', methods = ['GET', 'POST'])
 def file_up():
     if request.method == 'POST':
+        seed(int(datetime.date.today().year))
+        filename_download = 'final_lottery_'+str(datetime.datetime.now())+'.xlsx'
         file = request.files['file']
         filename = secure_filename(file.filename)
         print(filename)
         df = pd.read_excel(file)
-        df.to_csv('lottery.csv', encoding='utf-8', index=False)
         hindi, bengali = create_separate_arrays(df)
         hindi_lottery, bengali_lottery = lottery_maker(list(bengali), list(hindi), int(request.form['hindi']), int(request.form['bengali']))
-        print(len(hindi_lottery), len(bengali_lottery))
-        print(request.form['hindi'], request.form['bengali'])
-        return send_file('lottery.csv',  as_attachment=True)
+        final_list = bengali_lottery + hindi_lottery
+        languages = (['bengali'] * len(bengali_lottery)) + (['hindi'] * len(hindi_lottery))
+        df_final = pd.DataFrame(list(zip(final_list, languages)), columns=['admn_no', 'sec_lang'])
+        df_final.to_excel('final_lottery.xlsx')
+        return send_file('final_lottery.xlsx',  as_attachment=True, download_name=filename_download)
 
 
 if __name__ == '__main__':
