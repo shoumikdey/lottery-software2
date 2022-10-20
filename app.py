@@ -1,5 +1,5 @@
 from venv import create
-from flask import Flask, render_template, request, send_file
+from flask import Flask, render_template, request, send_file, session
 from werkzeug.utils import secure_filename
 import pandas as pd
 import numpy as np
@@ -14,7 +14,7 @@ def create_separate_arrays(df):
     admn_no = df['admn_no'].to_list()
     sec_lang = df['sec_lang'].to_list()
     for i in range(len(sec_lang)):
-        if sec_lang[i] == 'bengali':
+        if sec_lang[i].lower() == 'bengali':
             bengali_arr.append(admn_no[i])
         else:
             hindi_arr.append(admn_no[i])
@@ -40,11 +40,19 @@ def file_up():
     if request.method == 'POST':
         seed(int(datetime.date.today().year))
         filename_download = 'final_lottery_'+str(datetime.datetime.now())+'.xlsx'
+        if (request.files['file'].filename == '') or (request.form['hindi'] == '') or (request.form['bengali'] ==  ''):
+            return "One more field was left empty. Please refresh the site"
         file = request.files['file']
         filename = secure_filename(file.filename)
         print(filename)
         df = pd.read_excel(file)
         hindi, bengali = create_separate_arrays(df)
+        if (len(hindi) < int(request.form['hindi'])) or (len(bengali) < int(request.form['bengali'])):
+            return "Sample size requested is larger than population database. Please refresh the site"
+
+        if not ((len(hindi) == len(set(hindi))) and (len(bengali) == len(set(bengali)))):
+            return "Duplicates Found, Please refresh the page and try again"
+
         hindi_lottery, bengali_lottery = lottery_maker(list(bengali), list(hindi), int(request.form['hindi']), int(request.form['bengali']))
         final_list = bengali_lottery + hindi_lottery
         languages = (['bengali'] * len(bengali_lottery)) + (['hindi'] * len(hindi_lottery))
