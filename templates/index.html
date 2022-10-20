@@ -1,12 +1,30 @@
 <!doctype html>
-    <title>Admission Lottery</title>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admission Lottery</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+</head>
+<body>
+  <div class="container">
     <h1>Admission Lottery</h1>
+    
     <form method=post enctype=multipart/form-data>
-      Hindi
-      <input type="number" name="hindi">
-      Bengali
-      <input type="numebr" name="bengali">
-      <input type=file name=file>
-      <input type=submit value=Upload>
+      <div class="form-group">
+      <label for="hindi">Hindi:</label>
+      <input type="number" class="form-control" name="hindi" id="hindi">
+      </div>
+      <br>
+      <div class="form-group">
+      <label for="bengali">Bengali:</label>
+      <input type="number" name="bengali" class="form-control" id="bengali">
+      <br>
+      <input type=file class="form-control" name=file>
+      </div>
+      <br>
+      <input type=submit value=Upload class="btn btn-primary active">
     </form>
+  </div>
+
+  </body>
  </html>
