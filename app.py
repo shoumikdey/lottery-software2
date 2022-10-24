@@ -56,7 +56,7 @@ def file_up():
         hindi_lottery, bengali_lottery = lottery_maker(list(bengali), list(hindi), int(request.form['hindi']), int(request.form['bengali']))
         final_list = bengali_lottery + hindi_lottery
         languages = (['bengali'] * len(bengali_lottery)) + (['hindi'] * len(hindi_lottery))
-        df_final = pd.DataFrame(list(zip(final_list, languages)), columns=['admn_no', 'sec_lang'])
+        df_final = pd.DataFrame(list(zip(final_list, languages)), columns=['Application Number', 'Second Language'])
         df_final.to_excel('final_lottery.xlsx')
         return send_file('final_lottery.xlsx',  as_attachment=True, download_name=filename_download)
 
