@@ -11,8 +11,8 @@ UPLOAD_FOLDER = ''
 def create_separate_arrays(df):
     hindi_arr = list()
     bengali_arr = list()
-    admn_no = df['admn_no'].to_list()
-    sec_lang = df['sec_lang'].to_list()
+    admn_no = df['application_number'].to_list()
+    sec_lang = df['second_language'].to_list()
     for i in range(len(sec_lang)):
         if sec_lang[i].lower() == 'bengali':
             bengali_arr.append(admn_no[i])
